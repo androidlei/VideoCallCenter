@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <p id="greeting">
+    Loading...
+  </p>
+  <p>
+    aasfdfsdfsdffffffffffffsss
+  </p>
+  <canvas></canvas>
+  <script src="./dist/video-call-center.min.js"></script>
+  <script type="text/javascript">
+  window.onload = function() {
+    alert('onload');
+    var videoCallCenter = new VideoCallCenter('greeting', 'video-call-center common interface');
+    videoCallCenter.render();
+  }
+  </script>
+</body>
+</html>
