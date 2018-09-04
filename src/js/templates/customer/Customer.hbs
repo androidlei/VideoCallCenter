@@ -1,0 +1,46 @@
+{{#each customers}}
+    <div id="customers{{sid}}"
+         class="{{styleName}}"
+         onclick="{{onActive}}">
+        {{#if isWaiting}}
+            <div class="txt-video-call-center-waiting">
+                <img class="txt-call-video-rotate" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAcCAYAAACQ0cTtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2RTRERkExOTkzRTUxMUU4OUQxOEYwMzdCMzYxNTcwNCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo2RTRERkExQTkzRTUxMUU4OUQxOEYwMzdCMzYxNTcwNCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjZFNERGQTE3OTNFNTExRTg5RDE4RjAzN0IzNjE1NzA0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjZFNERGQTE4OTNFNTExRTg5RDE4RjAzN0IzNjE1NzA0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+9zF5kwAAAdBJREFUeNrElrtLA0EQxi8SVMRnQNBSJF2MYqGInSAWoihqI9jGF9hZ2FmKoFhpF2PpoxJBLQT/A9EYEC1EIyEoKsSIRYrzW5liuOxu9sIdDvzIMns73+3szOYs27YtF1SDDZAGL2AL1JqudyMUAEm72K7oJUrGqLDMbRlEJP4usGASQCU2AeZBmPlGNHH6yxFrBSlwBLbBPViluZQmzodRbhx5PbXlFgEhW20RR5wmUKkrkEZNsAN6ZgpkmD8LJh1BozQnngvyuSDbZEFsFAQkCSjQ7yE4AeP07DH4VhxNVak07ip2FnXZj82gplSfiX45ZyLvYMalkJLAn2KxdYB6kAQ5yyPjYiE6h0/LJxOHWQ32QRo8g4RfYiKXcUlBbHp0TiJzK2ANNAhHXiL25pHYMIu5LtKYl2z4y6PEZdj4VqjPSXY27VW5g3bQyftsFFxQjw16KGTUZ76V/r+KtYA4OAOzZcYNUxztRVwHnhzFEnN5NjFaJ1qqW3cRD0kq88GlGLdL3QdPWpKSG4mvj5DZHhsndGkULLE3u6b/Jj6/w+YTdCU5Y4yBAdPvxjbQq/A7rcc0xUFFKh4Jp/1IfDm/+iwLYuCVxovgznTxrwADAAjs99yvzdPsAAAAAElFTkSuQmCC" />
+                <span class="txt-video-call-center-text-tip">正在建立连接，请稍等...</span>
+            </div>
+        {{else}}
+            <div class="txt-video-call-center-customer-header">
+                <span class="txt-video-call-center-text-wrap txt-margin-l10 txt-color-white txt-font-14">{{showName}}</span>
+                <span id="txtVideoCallCenterTimer{{sid}}" class="txt-color-white txt-font-14 txt-margin-l20">{{wTimer}}</span>
+            </div>
+            <div class="txt-video-call-center-flex"></div>
+            <div class="txt-video-call-center-customer-footer">
+                {{#if isRequestTalking}}
+                        <div id="txtVideoCallCenterRequestTalk{{sid}}"
+                             class="txt-margin-l10 txt-video-call-center-customer-talk-btn"
+                             data-sid="{{sid}}"
+                             data-cid="{{cid}}"
+                             data-extra="{{extra}}"
+                             data-showName="{{showName}}"
+                        >{{cutDownTime}}</div>
+                {{else if isTalking}}
+                    <span class="txt-margin-l10 txt-color-white txt-font-em">正在通话中...</span>
+                {{/if}}
+                <div class="txt-video-call-center-flex"></div>
+                <div class="txt-video-call-center-customer-operation-layout">
+                    <div id="txtVideoCallCenterTalk{{sid}}" class="{{opClassName}} txt-margin-r10"
+                         data-sid="{{sid}}"
+                         data-cid="{{cid}}"
+                         data-extra="{{extra}}"
+                         data-showName="{{showName}}"
+                    ></div>
+                    <div id="txtVideoCallCenterEndCall{{sid}}" class="txt-video-room-end-call-btn txt-margin-r10"
+                         data-sid="{{sid}}"
+                         data-cid="{{cid}}"
+                         data-extra="{{extra}}"
+                         data-stream="{{streamId}}"
+                    ></div>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+{{/each}}

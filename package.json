@@ -1,52 +1,36 @@
 {
-  "name": "videocallcenter",
-  "version": "1.0.0",
-  "description": "video call center",
-  "main": "index.js",
+  "name": "html-bundler-project",
+  "version": "0.1.5",
+  "description": "",
   "scripts": {
-    "build": "del dist && rollup --config",
-    "prepublishOnly": "npm run build",
-    "test": "jest --coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/androidlei/VideoCallCenter.git"
-  },
-  "keywords": [
-    "video",
-    "call",
-    "center"
-  ],
-  "author": "leo",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/androidlei/VideoCallCenter/issues"
-  },
-  "homepage": "https://github.com/androidlei/VideoCallCenter#readme",
-  "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babelify": "^8.0.0",
-    "browser-sync": "^2.24.4",
-    "browserify": "^16.2.2",
-    "del": "^3.0.0",
-    "del-cli": "^1.1.0",
-    "gulp": "^3.9.1",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-typescript": "^5.0.0-alpha.2",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
-    "rollup": "^0.61.2",
-    "rollup-plugin-tslint": "^0.1.34",
-    "rollup-plugin-typescript2": "^0.15.0",
-    "rollup-plugin-uglify": "^3.0.0",
-    "tsify": "^4.0.0",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "watchify": "^3.11.0"
+    "dll": "node webpack.dll.js",
+    "start": "hb dev -p 8080",
+    "build": "hb dest"
   },
   "dependencies": {
-    "typescript": "^2.9.2"
+    "handlebars": "^4.0.11",
+    "jquery": "^3.3.1",
+    "onfire.js": "^1.0.6",
+    "socket.io-client": "^2.1.1",
+    "toastr": "^2.1.4"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "es5-shim": "^4.5.10",
+    "es6-promise": "^4.2.4",
+    "fetch-detector": "^1.0.1",
+    "fetch-ie8": "^1.5.0",
+    "file-loader": "^0.9.0",
+    "handlebars-loader": "^1.7.0",
+    "handlebars-template-loader": "^1.0.0",
+    "happypack": "^4.0.0",
+    "html-loader": "^0.4.4",
+    "json-loader": "^0.5.4",
+    "url-loader": "^0.5.7",
+    "webpack": "^3.6.0"
   }
 }
