@@ -1,8 +1,7 @@
 import $ from 'jquery';
-import toastr from 'toastr';
 import defaultOptions from '../common/options/DefaultOptions';
 import {fetchPost} from '../common/http/Fetch';
-import MCUManger from '../common/mcu/MCUManger';
+import RTCManger from '../common/trtc/RTCManger';
 import SocketManger from '../common/socket/SocketManger';
 import RoomOperation from '../room-operation/RoomOperation';
 import VideoDialog from '../video-dialog/VideoDialog';
@@ -36,15 +35,15 @@ export default class VideoDialogInitManger {
     async _getMCUToken() {
         const result = await fetchPost(`${this.options.serverUrl}/agent/createMtoken`, {aid: this.options.id}, this.options.token);
         if (result && result.statusCode === 200) {
-            const mcuToken = result.response.mUserToken;
-            MCUManger.getInstance(this.options).join(mcuToken, (msg) => {
+            const data = result.response;
+            RTCManger.getInstance(this.options).init(data, (msg) => {
                 if (msg.code === 200) {
                     //订阅混流成功 初始化socket
                     SocketManger.getInstance(this.options).init((result) => {
                         if (result.code === 200) {
                             //socket初始化成功调用登录接口登录呼叫中心
                             if (!VideoDialogInitManger.instance_isLogin) {
-                                this._loginCallCenter();
+                                this._loginCallCenter({mRoomId: data.mRoomId});
                             }
                         } else {
                             this.options.initCallBack && this.options.initCallBack(result);
@@ -59,7 +58,7 @@ export default class VideoDialogInitManger {
         }
     }
 
-    async _loginCallCenter() {
+    async _loginCallCenter(data) {
         const loginResult = await fetchPost(`${this.options.serverUrl}/agent/login`, {
             'aid': `${this.options.id}`,
             'token': `${this.options.token}`
@@ -100,7 +99,7 @@ export default class VideoDialogInitManger {
         VideoDialog.getInstance().destroy();
         MinDialogManger.getInstance().destroy();
         RoomOperation.getInstance(this.options).destroy();
-        MCUManger.getInstance(this.options).destroy();
+        RTCManger.getInstance(this.options).destroy();
         SocketManger.getInstance(this.options).disConnectSocket();
         AnswerCallManger.getInstance(this.options).destroy();
     }
@@ -110,7 +109,7 @@ export default class VideoDialogInitManger {
     }
 
     sendMessage(message, cid, cb) {
-        MCUManger.getInstance(this.options).sendMessage(message, Participant.getInstance().getParticipant(cid), cb);
+        // MCUManger.getInstance(this.options).sendMessage(message, Participant.getInstance().getParticipant(cid), cb);
     }
 
     setAgentStatus(available, cb) {

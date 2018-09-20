@@ -3868,7 +3868,31 @@ button.toast-close-button {
     flex-direction: column;
 }
 
+.txt-pre-img-dashboard {
+    position:absolute;
+    width: 300px;
+    height: 500px;
+    background: transparent;
+    box-shadow: 5px 5px 5px #888888;
+    z-index: 100;
+    top: 0;
+    right: -310px;
+    display: none;
+    flex-direction: column;
+}
+
 .txt-video-call-center-dashboard-header {
+    font-size:14px;
+    height:38px;
+    background:#eef0f6;
+    padding:0 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+}
+
+.txt-video-call-center-dashboard-pre-img-header {
     font-size:14px;
     height:38px;
     background:#eef0f6;
@@ -3935,7 +3959,17 @@ button.toast-close-button {
 .txt-video-call-center-dashboard-content {
     width: 100%;
     height: 100%;
-    background-color: black;
+    background-color: #282828;
+    background-image: -webkit-radial-gradient(black 15%, transparent 16%),
+    -webkit-radial-gradient(black 15%, transparent 16%),
+    -webkit-radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%),
+    -webkit-radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%);
+    background-image: radial-gradient(black 15%, transparent 16%),
+    radial-gradient(black 15%, transparent 16%),
+    radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%),
+    radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%);
+    background-position: 0 0px, 8px 8px, 0 1px, 8px 9px;
+    background-size: 16px 16px;
     display: flex;
     flex-direction: row;
     vertical-align: center;
@@ -4198,6 +4232,15 @@ button.toast-close-button {
     height: 1.5em;
 }
 
+.txt-video-room-capture-call-btn {
+    background-color: #0cb208;
+    border-radius: 10px;
+    width: 3.8em;
+    height: 1.5em;
+    text-align: center;
+    color: white;
+}
+
 .txt-video-room-end-call-btn:active {
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAUCAYAAADLP76nAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjUyQUYwNTk0N0I4MTExRTg5M0UzQzEwNkY5OERCNTQ3IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjUyQUYwNTk1N0I4MTExRTg5M0UzQzEwNkY5OERCNTQ3Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NTJBRjA1OTI3QjgxMTFFODkzRTNDMTA2Rjk4REI1NDciIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NTJBRjA1OTM3QjgxMTFFODkzRTNDMTA2Rjk4REI1NDciLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6gMdCIAAACOElEQVR42mL84OPNgAWwAXEAFFsCsRRUjJ7gCxA/AeLzQLweiDcC8S90RSxYNAYCcRcQqzAMLOABYg0ojgTiO0BcDsTrkBUxIbGZgbgTqmCgHY8NgNy0FupGZmwx0AbEZQyDH8DcWI4cAyFDxPHIngiBeQCUOfsZhh6YAHI7yAOhQCwzBD0gDcRhLNCikiqASUaGgdXGloHVyJCBSUGRgZGTEyLx6xfD3wcPGP5cvMjw+/Ahhr/371PLygBGYD3wAMiQp8QUZk1NBo7QUAYWUzO42L83bxj+PXvGwPDnDwOTuDgDk7Q0XA7kkZ9r1zD8OX+eUg88BHngB5DBTq4JHMkpDOwBiEj8sXQJw88VK7CqZfPyYuDMzILzf+3ezfB98iQGhv//ybX+FxO22o2o5CIiwsDT1YXieHDIv3yJU8//t+9QPeTqysAzeQoDk5QU+ckWiJ+To5E9OASYdLQwxOHpHgtg5OHGTH7y8gwcMbHkuv85yAOXyNH5c8N6hn9PnqDG55YtDL8PHcKp5/exYwy/du1EjZUPHxh+rlxBrgfOgPJANJCxhCztrKwMPL194OT0tbmZ4e/1a0RpY9HTY+CqqGT4/+ULw5eyUrAnyASxIA+AKrK7Q7AueArEyrBMXDQEK7JCUEqGtYVWA3H3EHJ8N9TNKM3pSiCeMgQcPxXqVoz+wF8gzoW28u4MQoffgbbbcqBuxdkjA3UaNkMVg3pnxtCGEyudHfwbmlHPQruUq7FVugABBgD575XXwkzm3gAAAABJRU5ErkJggg==") no-repeat;
     background-size: 100% 100%;
@@ -4316,6 +4359,7 @@ button.toast-close-button {
     padding-left: 5px;
     background-color: #0cb208;
     color: #FFFFFF;
+    line-height: 18px;
 }
 
 .onoffswitch-inner:after {
@@ -4324,6 +4368,7 @@ button.toast-close-button {
     background-color: #ccc;
     color: #FAFAFA;
     text-align: right;
+    line-height: 18px;
 }
 
 .onoffswitch-switch {
@@ -4334,7 +4379,7 @@ button.toast-close-button {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 27px;
+    right: 33px;
     margin: 1.5px;
     border: 2px solid #ccc;
     border-radius: 20px;
@@ -4392,6 +4437,58 @@ button.toast-close-button {
     position: absolute;
     bottom: -7px;
     left: 66px;
+}
+.txt-video-call-center-local-video {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20%;
+    z-index: 300;
+}
+
+.txt-pre-img-content {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 5px;
+    justify-content: space-between;
+    align-content: flex-start;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+    flex-wrap: wrap;
+}
+
+.txt-pre-img-content > div {
+    border-radius: 6px;
+    width: 135px;
+    height: 135px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    position: relative;
+    background-color: black;
+}
+
+.txt-pre-img-content > div:hover {
+    width: 140px;
+    box-shadow: 2px 2px 3px #CBCBCB;
+}
+
+.txt-pre-img-content > div > img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.txt-pre-img-content::-webkit-scrollbar {
+    width: 8px;
+}
+.txt-pre-img-content::-webkit-scrollbar-thumb {
+    background-color: #eef0f6;
 }
 
 

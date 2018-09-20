@@ -6,6 +6,7 @@ import Timer from '../common/timer/Timer';
 import RoomOperation from "../room-operation/RoomOperation";
 import VideoDialog from "../video-dialog/VideoDialog";
 import MinDialogManger from "../min-dialog/MinDialogManger";
+import RTCManger from '../common/trtc/RTCManger';
 
 export default class AnswerCallManger {
     static getInstance(opts = {}) {
@@ -33,6 +34,8 @@ export default class AnswerCallManger {
             accept: true
         }, AnswerCallManger.instance._options.token);
         if (result && result.statusCode === 200 && result.response.result) {
+            RTCManger.getInstance(AnswerCallManger.instance._options).getLocalStream();
+            RoomOperation.getInstance(AnswerCallManger.instance._options).render(call);
             onfire.fire('onCallAnswered', call);
             this._changeCallStatus(call.sid, 'answered');
             this._removeCallFromArray(call);
@@ -120,6 +123,7 @@ export default class AnswerCallManger {
     _addHandle(sid) {
         //添加按钮点击事件
         $(`#answerCall${sid}`).one('click', (event) => {
+            event.target.dataset.showName = event.target.dataset.showname;
             this._answerCall(event.target.dataset);
         });
     }
@@ -146,7 +150,7 @@ export default class AnswerCallManger {
         renderParams.cid = call.cid;
         renderParams.sid = call.sid;
         renderParams.extra = call.extra;
-        const extra = JSON.parse(call.extra);
+        const extra = call.extra ? JSON.parse(call.extra) : {};
         renderParams.callType = AnswerCallManger.instance._callType[extra.terminalDevice] === undefined
             ? 'txt-video-room-call-type-web'
             : AnswerCallManger.instance._callType[extra.terminalDevice];

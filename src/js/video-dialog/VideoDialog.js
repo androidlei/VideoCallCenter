@@ -4,6 +4,7 @@ import dialog from '../templates/dialog/Dialog';
 import header from '../templates/header/video-header/VideoHander';
 import content from '../templates/content/VideoContent';
 import MinDialogManger from '../min-dialog/MinDialogManger';
+import PreImgDialog from './PreImgDialog';
 
 export default class VideoDialog {
     static getInstance() {
@@ -27,6 +28,7 @@ export default class VideoDialog {
         $('#txtVideoCallCenter').css({'height': `${opts.height}px`});
         $('#txtVideoCallCenter').append(header({}));
         $('#txtVideoCallCenter').append(content({}));
+        PreImgDialog.getInstance().render();
         this._addHandler();
     }
 
@@ -81,9 +83,10 @@ export default class VideoDialog {
             }
         });
         $('#txtVideoCallHeaderPreImg').on('click', () => {
-
+            PreImgDialog.getInstance().show();
         });
         $('#txtVideoCallFullScreen').on('click', () => {
+            PreImgDialog.getInstance().hidden();
             if (VideoDialog.instance._isFullScreen) {
                 this._exitFullScreen();
                 this._recordWidthAndHeight();
