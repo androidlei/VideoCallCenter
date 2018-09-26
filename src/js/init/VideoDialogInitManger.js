@@ -112,6 +112,10 @@ export default class VideoDialogInitManger {
         // MCUManger.getInstance(this.options).sendMessage(message, Participant.getInstance().getParticipant(cid), cb);
     }
 
+    sendPicMessage(file, cb) {
+        RTCManger.getInstance(this.options).uploadPic(file, cb);
+    }
+
     setAgentStatus(available, cb) {
         this._setStatus(available, cb);
     }

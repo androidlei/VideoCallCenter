@@ -268,183 +268,62 @@ export default class RTCManger {
             cb && cb({code: 500, msg: err});
         });
     }
-    //
-    // /**
-    //  * 加入房间
-    //  * @param token
-    //  * @param cb
-    //  */
-    // join(token, cb) {
-    //     MCUManger.instance._conference.join(token)
-    //         .then((resp) => {
-    //             MCUManger.instance._resp = resp;
-    //             this._publish(resp, cb);
-    //         }, (err) => {
-    //             cb && cb({code: 500, msg: err});
-    //         })
-    // }
-    //
-    // /**
-    //  * 发送IM消息
-    //  * @param message
-    //  * @param participantId
-    //  * @param cb
-    //  */
-    // sendMessage(message, participantId, cb) {
-    //     if (!participantId) {
-    //         cb({code: 500, msg: 'No participant ID found'});
-    //         return;
-    //     }
-    //     console.log('sendMessage: ', message);
-    //     console.log('ParticipantId: ', participantId);
-    //     MCUManger.instance._conference.send(message, participantId)
-    //         .then((success) => {
-    //             cb && cb({code: 200, msg: 'Send message success!'});
-    //         }, (error) => {
-    //             cb && cb({code: 500, msg: error});
-    //         });
-    // }
-    //
-    // /**
-    //  * 发布本地流
-    //  * @param resp
-    //  * @param cb
-    //  */
-    // _publish(resp, cb) {
-    //     const audioConstraintsForMic = new Ics.Base.AudioTrackConstraints(Ics.Base.AudioSourceInfo.MIC);
-    //     const videoConstraintsForCamera = MCUManger.instance._options.video
-    //         ? new Ics.Base.VideoTrackConstraints(Ics.Base.VideoSourceInfo.CAMERA)
-    //         : false;
-    //     Ics.Base.MediaStreamFactory.createMediaStream(new Ics.Base.StreamConstraints(
-    //        audioConstraintsForMic, videoConstraintsForCamera
-    //     ))
-    //         .then((stream) => {
-    //             MCUManger.instance._tracks = stream.getTracks();
-    //             const localStream = new Ics.Base.LocalStream(stream, new Ics.Base.StreamSourceInfo('mic', 'camera'));
-    //             MCUManger.instance._conference.publish(localStream)
-    //                 .then((publication) => {
-    //                     MCUManger.instance._publication = publication;
-    //                     publication.addEventListener('error', (err) => {
-    //                         console.log('publication: ', err);
-    //                         // cb && cb({code: 500, msg: 'Local media stream failed to publish'});
-    //                     });
-    //                     publication.addEventListener('ended', (err) => {
-    //                         console.log('publication ended: ', err);
-    //                         if (MCUManger.instance && MCUManger.instance._options) {
-    //                             // if (!MCUManger.instance._isEnded) {
-    //                             //     MCUManger.instance._isEnded = true;
-    //                             //     toastr.error('视频网路服务异常，将退出重新初始化', '异常提示！');
-    //                             //     this._logoutCallCenter();
-    //                             // }
-    //                         }
-    //                     });
-    //                     this._subscribeStream(resp, cb);
-    //                 });
-    //         }, (err) => {
-    //             toastr.error('无法创建本地音视频流，请检查本地媒体设备正常后，重新登录', '登录失败！');
-    //             cb && cb({code: 500, msg: 'Failed to create local media stream'});
-    //         })
-    // }
-    //
-    // /**
-    //  * 订阅流
-    //  * @param resp
-    //  * @param cb
-    //  */
-    // _subscribeStream(resp, cb) {
-    //     for (const stream of resp.remoteStreams) {
-    //         if (stream.source.audio === 'mixed' || stream.source.video === 'mixed') {
-    //             MCUManger.instance._conference.subscribe(stream, {
-    //                 audio: {codecs: [{name: 'opus'}]},
-    //                 video: true
-    //             }).then((subscription) => {
-    //                 MCUManger.instance._subscription = subscription;
-    //                 $('#txtVideoCallCneterVideo').prop('srcObject', stream.mediaStream);
-    //                 MCUManger.instance._mixedStream = stream;
-    //                 stream.addEventListener('layoutchange', (event) => {
-    //                     console.error('Layout Change: ', event);
-    //                 });
-    //                 cb && cb({code: 200, msg: 'Subscribe to the mixed media stream successfully'});
-    //                 subscription.addEventListener('error', (err) => {
-    //                     console.log('Subscription error: ' + err.error.message);
-    //                     // cb && cb({code: 500, msg: err});
-    //                 });
-    //             })
-    //         }
-    //     }
-    // }
-    //
-    // /**
-    //  * 流加入或者退出事件
-    //  */
-    // _streamAddListener() {
-    //     MCUManger.instance._conference.addEventListener('streamadded', (event) => {
-    //        //TODO: 新流加入
-    //         console.log('A new stream is added', event);
-    //         MCUManger.instance._stream = event.stream;
-    //         event.stream.addEventListener('ended', () => {
-    //            //TODO: 流退出
-    //             console.log('A new stream is ended', event);
-    //             if (MCUManger.instance && MCUManger.instance._options) {
-    //                 RoomOperation.getInstance(MCUManger.instance._options).onStreamEnded(event.stream.origin);
-    //             }
-    //         });
-    //     });
-    // }
-    //
-    // /**
-    //  * 接受IM消息
-    //  */
-    // _messageReceivedListener() {
-    //     MCUManger.instance._conference.addEventListener('messagereceived', (event) => {
-    //         onfire.fire('message', event.message);
-    //     });
-    // }
-    //
-    // /**
-    //  * ICE链接断开
-    //  */
-    // _serverDisconnectedListener() {
-    //     MCUManger.instance._conference.addEventListener('serverdisconnected', (event) => {
-    //         console.log('Server Disconnected: ', event);
-    //         // if (MCUManger.instance && MCUManger.instance._resp) {
-    //         //     this._publish(MCUManger.instance._resp, null);
-    //         // }
-    //     });
-    // }
-    //
-    // /**
-    //  * 新的参与者加入
-    //  */
-    // _participantJoinedListener() {
-    //     MCUManger.instance._conference.addEventListener('participantjoined', (event) => {
-    //         console.log('Participant Joined: ', event);
-    //     });
-    // }
-    //
-    // async _logoutCallCenter() {
-    //     const logout = await fetchPost(`${MCUManger.instance._options.serverUrl}/agent/logout`, {
-    //         "aid": `${MCUManger.instance._options.id}`,
-    //         "token": `${MCUManger.instance._options.token}`
-    //     }, MCUManger.instance._options.token);
-    // }
-    //
-    // _removeEventListener() {
-    //     MCUManger.instance._conference.clearEventListener('participantjoined');
-    //     MCUManger.instance._conference.clearEventListener('streamadded');
-    //     MCUManger.instance._conference.clearEventListener('serverdisconnected');
-    //     MCUManger.instance._conference.clearEventListener('messagereceived');
-    //     MCUManger.instance._conference.clearEventListener('error');
-    //     MCUManger.instance._conference.clearEventListener('ended');
-    //     MCUManger.instance._conference.clearEventListener('layoutchange');
-    //
-    //     MCUManger.instance._publication.clearEventListener('error');
-    //     MCUManger.instance._publication.clearEventListener('ended');
-    //
-    //     MCUManger.instance._subscription.clearEventListener('error');
-    //
-    //     MCUManger.instance._mixedStream.clearEventListener('layoutchange');
-    //
-    //     MCUManger.instance._stream.clearEventListener('ended');
-    // }
+
+    uploadPic(file, cb) {
+        const businessType = webim.UPLOAD_PIC_BUSSINESS_TYPE.C2C_MSG;
+        const selToID = RTCManger.instance._loginInfo.userId;
+        const identifier = RTCManger.instance._loginInfo.userId;
+        const opt = {
+            'file': file, //图片对象
+            'From_Account': identifier, //发送者帐号
+            'To_Account': selToID, //接收者
+            'businessType': businessType//业务类型
+        };
+        webim.uploadPic(opt, (resp) => {
+            //上传图片成功
+            console.log('上传图片成功：', resp);
+            this.sendPic(resp, selToID, cb);
+        }, (err) => {
+            console.log('上传图片失败：', err);
+            cb && cb({code: 500, msg: err});
+        })
+    }
+
+    sendPic(images, selToID) {
+        const sendType = webim.SESSION_TYPE.C2C; //会话类型
+        const id = selToID; // 对方id
+        const name = id; // 对方昵称
+        const icon = ''; //对方头像
+        const time = Math.round(new Date().getTime() / 1000); // 会话最新时间戳
+        const selSess = new webim.Session(sendType, id, name, icon, time);
+        const msg = new webim.Msg(selSess, true);
+        const images_obj = new webim.Msg.Elem.Images(images.File_UUID);
+        for (let i in images.URL_INFO) {
+            const img = images.URL_INFO[i];
+            let newImg;
+            let type;
+            switch (img.PIC_TYPE) {
+                case 1: // 原图
+                    type = 1;
+                    break;
+                case 2: // 小图
+                    type = 3;
+                    break;
+                case 4: // 大图
+                    type = 2;
+                    break;
+            }
+            newImg = new webim.Msg.Elem.Images.Image(type, img.PIC_Size, img.PIC_Width, img.PIC_Height, img.DownUrl);
+            images_obj.addImage(newImg);
+        }
+        msg.addImage(images_obj);
+        webim.sendMsg(msg, (resp) => {
+            console.log('发送图片成功：', resp);
+            cb && cb({code: 200, msg: resp});
+        }, (err) => {
+            console.log('发送图片失败：', err);
+            cb && cb({code: 500, msg: err});
+        });
+    }
+
 }

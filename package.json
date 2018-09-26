@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dll": "node webpack.dll.js",
-    "start": "hb dev -p 8080",
+    "start": "hb dev",
     "build": "hb dest"
   },
   "dependencies": {

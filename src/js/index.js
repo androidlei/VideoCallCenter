@@ -27,4 +27,8 @@ const setAnswerStauts = (status) => {
     VideoDialogInitManger.getInstance().setAnswerStauts(status);
 };
 
-export {init, logout, sendMessage, setAgentStatus, on, setAnswerStauts};
+const sendPicMessage = (file, cb) => {
+    VideoDialogInitManger.getInstance().sendPicMessage(file, cb);
+};
+
+export {init, logout, sendMessage, setAgentStatus, on, setAnswerStauts, sendPicMessage};
