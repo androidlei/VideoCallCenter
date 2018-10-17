@@ -1,159 +1,161 @@
-## 使用手册
+## 使用文档
 
-### Globle Mod
-适用于一些较简单的项目
+### 事件参数未定义全，随着连调进行，会随时同步更新本文档
+
+#### 第一步 引入资源
+```sh
+页面引入 video-call-center.min.css
+页面引入 video-call-center-vendors.min.js (必须在video-call-center.min.js之前引入)
+页面引入 video-call-center.min.js
+```
+
+#### 第二步 使用
+
+##### 初始化
+```sh
+ 初始化
+ VideoCallCenter.init(opts);
+```
+* opts
+
+| opts |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| id|  text      |登录ID|
+| token    |    text        |登录token|
+| audio    |    boolean        |是否打开音频 true：打开 false：关闭|
+| video    |    boolean        |是否打开视频 true：打开 false：关闭|
+| width    | text      |视屏弹窗宽度（'800px'）|
+| height    | text      |视屏弹窗高度（'500px'）|
+| serverUrl    | text      |呼叫中心后台地址|
+| socketUrl    | text      |呼叫中心后台socket地址|
+| initCallBack| function      |初始化回调|
+
+* 初始化回调返回参数说明
+
+| result |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| code|  状态码      |200：成功， 500： 失败|
+| msg    |    text        |初始化成功或失败消息对象|
+
+##### 发送消息
+```sh
+ VideoCallCenter.sendMessage(msg, callBack);
+```
+*msg
+
+| msg |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| cid|  text      |客户端ID|
+| entry    |    text        |待发送的消息|
+
+* callBack
+
+发送消息成功或失败回调
+| result |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| code|  状态码      |200：成功， 500： 失败|
+| msg    |    text        |成功或失败消息|
+
+##### 设置服务状态
+```sh
+ VideoCallCenter.setAgentStatus(status, callBack);
+```
+*status
+
+| status |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| status|  number      |0：不可服务， 1：可服务|
+
+* callBack
+
+设置状态回调
+
+| result |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| code|  状态码      |200：成功， 500： 失败|
+| msg    |    text        |成功或失败消息|
+
+
+##### 退出
+```sh
+ VideoCallCenter.logout(opts);
+```
+* opts
+
+| opts |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| logoutCallBack| function      |登出回调|
+
+* 初始化回调返回参数说明
+
+| result |      type      | 说明|
+|:-------------:|:------------------:|:--------------:|
+| code|  状态码      |200：成功， 500： 失败|
+| msg    |    text        |登出成功或失败消息对象|
+
+##### 事件监听
 
 ```sh
-npm install html-bundler -g
+ VideoCallCenter.on(eventType, callBack);
+ 
+ eventType： 订阅事件名称
+ callBack：  订阅事件回调
+ 
 ```
+##### 参数说名
+* eventType
 
-```sh
-hb create project
-hb create project -w //add webpack.config.js local
-```
+| eventType名称 |      说明      |
+|:-------------:|:------------------:|
+| onCallComing|  呼叫进入      |
+| onCallEnd    |    呼叫挂断        |
+| onCallEndAll    | 呼叫结束      |
+| onCallAnswered    | 接听呼叫      |
+| onCallMute    | 呼叫静音      |
+| message| 接收消息      |
+| onShow| 呼叫中心弹框显示      |
+| onHide| 呼叫中心弹框隐藏      |
+| onCurrentCall| 当前视频通话中的call      |
 
 
-```sh
-cd project && npm install
-```
+* onCallComing 消息回调参数参数
+
+| cid |      客户id      |
+|:-------------:|:------------------:|
+| sid |      对话id      |
+| aid |      客服id      |
+| extra |      C端数据      |
+
+* onCallEnd 消息回调参数参数
+
+| cid |      客户id      |
+|:-------------:|:------------------:|
+| sid |      对话id      |
+| aid |      客服id      |
+| extra |      C端数据      |
+
+* onCallEndAll 消息回调参数参数
+
+| code |      200 (呼叫结束，视频弹框消失)     |
+|:-------------:|:------------------:|
+
+* onCallMute 消息回调参数参数
+
+| cid |      客户id      |
+|:-------------:|:------------------:|
+| sid |      对话id      |
+| aid |      客服id      |
+| extra |      C端数据      |
+
+* onCurrentCall 消息回调参数参数
+
+| cid |      客户id      |
+|:-------------:|:------------------:|
+| sid |      对话id      |
+| aid |      客服id      |
+| extra |      C端数据      |
 
 
-```sh
-hb dev -p 8080
-```
 
 
-```sh
-hb dest
-```
 
-### Local Mod
-适用于正式项目
-
-```sh
-cd your-project
-npm install html-bundler --save-dev
-```
-
-自动生成html-bundler.config.js
-
-```sh
-npm install html-bundler -g
-hb init
-hb init -w  //自动生成webpack.config.js
-```
-
-create a js file (e.g: bundle.js)and write:
-
-```js
-require('html-bundler')
-
-```
-
-```sh
-node bundle.js dev -p 8080
-```
-
-```sh
-node bundle.js dest
-```
-
-### DLL优化
-需要在webpack.dll.js的vendors中配置业务需要静态化的包，然后执行
-
-```sh
-node webpack.dll.js
-
-```
-执行完成后会生成一个manifest.json文件，每次修改vendors配置后需要重新生成。
-
-### 配置文件解析
-```js
-/* eslint-disable */
-module.exports = {
-    src: './src',                               //源代码所在路径
-
-    entries: ['./src/html/**', './src/*.html'], //html入口文件
-
-    ignore: ['./src/js/lib', './src/css/lib'],  //不进行任何处理的路径
-
-    imgFolder: './src/imgs',                    //图片目录
-
-    moveList: ['./src/fonts', './src/a.js'],    //需要平移的目录和文件
-
-    devMod: {                                   //开发模式
-        output: './dev',                        //开发模式下打包后的输出位置
-        minify: false,                          //是否最小化，如果开启，则js、css都会进行压缩
-        minifyHTML: false,                      //是否压缩html，如果开启，则会对html文件进行压缩
-        bundle: true,                           //是否使用webpack进行打包
-        concat: false,                          //是否合并文件
-        sourcemap: true,                        //是否进行sourcemap
-        less: true,                             //是否进行less预处理
-        inline: false,                          //是否把所有资源打成inline（目前不能和bundle配合使用）
-        watchFolder: {                          //文件分类进行监听，这样修改js不会编译css，提高性能
-            css: ['./src/css'],
-            js: ['./src/js'],
-            imgs: ['./src/imgs'],
-            html: ['./src/html']
-        },
-        custom: {                               //自定义任务, 格式样例[{func: sass, opts: {logger: true}}, {func: task, opts: null }]
-            js: [],
-            css: [],
-            imgs: [],
-            html: []
-        },
-        server: true,                           //是否开启server，默认集成gulp-connect，如果配置为'bird',则使用bird。
-        buildTarget: 'default'                  //buildTarget用于设置dist后的目录结构，如果选择default,则默认为css, js, html,如果是一个对象，则表示自定义，不过目前只支持按照文件类型进行分类。
-    },
-
-    destMod: {                                  //生产模式，配置项和开发模式完全相同
-        output: './dist',
-        minify: true,
-        minifyHTML: true,
-        bundle: true,
-        concat: true,
-        less: true,
-        inline: false,
-        sourcemap: false,
-        watchFolder: null,
-        custom: {
-            js: [],
-            css: [],
-            imgs: [],
-            html: []
-        },
-        server: false,
-        buildTarget: {
-            js: './js/',
-            css: './css/',
-            imgs: './images/',
-            html: './html/'
-        },
-    },
-
-    rdMod: {
-        //rd环境配置项,内容同上
-    },
-
-    qaMod: {
-        //qa环境配置项,内容同上
-    },
-
-    birdConfig: {                               //bird 配置项
-        basePath: "./dev",
-        targetServer: {
-            port: "8276",
-            host: "your server host",
-            headers: {
-                cookie: ""
-            }
-        },
-        ajaxOnly: false
-    },
-
-    serverConfig: {                             //gulp connect 配置项
-        root: './dev'
-    }
-}
-
-```

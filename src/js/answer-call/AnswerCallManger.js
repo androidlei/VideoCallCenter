@@ -22,6 +22,7 @@ export default class AnswerCallManger {
                 "wx": "txt-video-room-call-type-wx",
             };
             AnswerCallManger.instance._timer = null;
+            AnswerCallManger.instance.sendToId = null;
         }
         return AnswerCallManger.instance;
     }
@@ -37,6 +38,7 @@ export default class AnswerCallManger {
             RTCManger.getInstance(AnswerCallManger.instance._options).getLocalStream();
             RoomOperation.getInstance(AnswerCallManger.instance._options).render(call);
             onfire.fire('onCallAnswered', call);
+            AnswerCallManger.instance.sendToId = `customer_${call.cid}`;
             this._changeCallStatus(call.sid, 'answered');
             this._removeCallFromArray(call);
             this._removeCall(call.sid);
@@ -49,6 +51,10 @@ export default class AnswerCallManger {
                 this._render();
             }
         }
+    }
+
+    getSendToId() {
+        return AnswerCallManger.instance.sendToId;
     }
 
     callComing(call) {

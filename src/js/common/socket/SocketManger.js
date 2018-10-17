@@ -3,6 +3,7 @@ import onfire from 'onfire.js';
 import AnswerCallManger from '../../answer-call/AnswerCallManger';
 import RoomOperation from "../../room-operation/RoomOperation";
 import VideoDialog from "../../video-dialog/VideoDialog";
+import PreImgDialog from "../../video-dialog/PreImgDialog";
 
 export default class SocketManger {
     static getInstance(opts = {}) {
@@ -117,6 +118,7 @@ export default class SocketManger {
     _onCustomerImg() {
         this.socket.on('SA_Customer_Img', (params) => {
             console.log('SA_Customer_Img', params);
+            PreImgDialog.getInstance().addImg(params.imgUrl);
         });
     }
 

@@ -31,6 +31,7 @@ export default class UploadFile {
 
     upload(blob, cb) {
         let files = [];
+        console.log('OSS: ', UploadFile.instance.Client);
         UploadFile.instance.Client.put(`${UploadFile.instance._directory}/${this.guid()}`, blob)
             .then((result) => {
                 console.log('upload file: ', result);

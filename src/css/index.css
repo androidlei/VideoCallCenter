@@ -3879,6 +3879,7 @@ button.toast-close-button {
     right: -310px;
     display: none;
     flex-direction: column;
+    background-color: white;
 }
 
 .txt-video-call-center-dashboard-header {

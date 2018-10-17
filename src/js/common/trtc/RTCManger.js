@@ -3,6 +3,7 @@ import 'trtc-sdk';
 import RoomOperation from "../../room-operation/RoomOperation";
 import UploadFile from '../uploadFile/UploadFile';
 import PreImgDialog from "../../video-dialog/PreImgDialog";
+import AnswerCallManger from "../../answer-call/AnswerCallManger";
 
 
 export default class RTCManger {
@@ -24,7 +25,7 @@ export default class RTCManger {
             userId: data.info.userId,
             userSig: data.info.userSign,
             accountType: window.parseInt(data.info.accountType),
-            closeLocalMedia: true,
+            closeLocalMedia: false,
             debug: {
                 log: true,
                 vconsole: false,
@@ -34,7 +35,7 @@ export default class RTCManger {
             console.log('RTC login: ', result);
             const mRoomId = data.mRoomId;
             const mUserToken = data.mUserToken;
-            this._checkRTC({mRoomId: mRoomId, mUserToken: mUserToken}, cb);
+            this._checkRTC({mRoomId: mRoomId, mUserToken: mUserToken, userId: data.info.userId}, cb);
         }, (error) => {
             cb && cb({code: 500, msg: error})
         });
@@ -59,6 +60,7 @@ export default class RTCManger {
         }, () => {
             cb && cb({code: 200, msg: '进入房间成功'});
             this._addListenet();
+            this.getStats(null);
         }, (err) => {
             cb && cb({code: 500, msg: '进入房间失败'});
         })
@@ -78,6 +80,26 @@ export default class RTCManger {
         }, (err) => {
            console.log("get local stream err: ", err);
         });
+    }
+
+    getStats(userId) {
+        const opts = userId ? {userId: userId, interval: 2000} : {interval: 2000};
+        RTCManger.instance.RTC.getStats(opts, (result) => {
+            //接收端数据
+            let data = {
+                audioRecv: this.bytesToSize(result.audio.bytesReceived),
+                videoRecv: this.bytesToSize(result.video.bytesReceived),
+                width: result.resolutions.recv.width,
+                height: result.resolutions.recv.height,
+                audioPacketsReceived: result.audio.packetsReceived,
+                audioPacketsLost: result.audio.packetsLost,
+                videoPacketsReceived: result.video.packetsReceived,
+                videoPacketsLost: result.video.packetsLost,
+            }
+            console.log('获取统计数据：', data);
+        }, (err) => {
+            console.log('获取统计数据错误：', err);
+        })
     }
 
 
@@ -109,14 +131,17 @@ export default class RTCManger {
         RTCManger.instance.RTC.on('onLocalStreamAdd', (data) => {
             if( data && data.stream){
                 $('#txtVideoCallCneterLocalVideo').prop('srcObject', data.stream);
-                // $('#txtVideoCallCneterLocalVideo').on('click', () => {
-                //     this.captureVideo();
-                // });
+                $('#txtVideoCallCneterLocalVideo').on('click', () => {
+                    this.captureVideo();
+                });
             }
         });
         RTCManger.instance.RTC.on('onRemoteStreamUpdate', (data) => {
             console.log("Remote Stream: ", data);
             if( data && data.stream){
+                if (data.userId) {
+                    // this.getStats(data.userId);
+                }
                 $('#txtVideoCallCneterVideo').prop('srcObject', data.stream);
                 RoomOperation.getInstance(RTCManger.instance._options).startVideo();
             }
@@ -207,6 +232,7 @@ export default class RTCManger {
      * @param newMsgList
      */
     onMsgNotify(newMsgList) {
+        console.log('接收到新消息：', newMsgList);
         let sess, newMsg, selToID;
         const sessMap = webim.MsgStore.sessMap();
         for (let j in newMsgList) {
@@ -271,8 +297,9 @@ export default class RTCManger {
 
     uploadPic(file, cb) {
         const businessType = webim.UPLOAD_PIC_BUSSINESS_TYPE.C2C_MSG;
-        const selToID = RTCManger.instance._loginInfo.userId;
+        const selToID = AnswerCallManger.getInstance(RTCManger.instance._options).getSendToId();
         const identifier = RTCManger.instance._loginInfo.userId;
+        console.log('send img msg: ', selToID);
         const opt = {
             'file': file, //图片对象
             'From_Account': identifier, //发送者帐号
@@ -289,7 +316,7 @@ export default class RTCManger {
         })
     }
 
-    sendPic(images, selToID) {
+    sendPic(images, selToID, cb) {
         const sendType = webim.SESSION_TYPE.C2C; //会话类型
         const id = selToID; // 对方id
         const name = id; // 对方昵称
@@ -298,6 +325,8 @@ export default class RTCManger {
         const selSess = new webim.Session(sendType, id, name, icon, time);
         const msg = new webim.Msg(selSess, true);
         const images_obj = new webim.Msg.Elem.Images(images.File_UUID);
+        let thumbUrl = '';
+        let url = '';
         for (let i in images.URL_INFO) {
             const img = images.URL_INFO[i];
             let newImg;
@@ -305,9 +334,11 @@ export default class RTCManger {
             switch (img.PIC_TYPE) {
                 case 1: // 原图
                     type = 1;
+                    url = img.DownUrl;
                     break;
                 case 2: // 小图
                     type = 3;
+                    thumbUrl = img.DownUrl;
                     break;
                 case 4: // 大图
                     type = 2;
@@ -317,13 +348,33 @@ export default class RTCManger {
             images_obj.addImage(newImg);
         }
         msg.addImage(images_obj);
+        const imgFile = {
+            uid: images.File_UUID,
+            status: 'done',
+            name: 'test',
+            url: url,
+            thumbUrl: thumbUrl,
+        };
         webim.sendMsg(msg, (resp) => {
             console.log('发送图片成功：', resp);
-            cb && cb({code: 200, msg: resp});
+            cb && cb({code: 200, msg: imgFile});
         }, (err) => {
             console.log('发送图片失败：', err);
             cb && cb({code: 500, msg: err});
         });
     }
 
+    bytesToSize(bytes) {
+        const k = 1000;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes <= 0) {
+            return '0 Bytes';
+        }
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+        if (!sizes[i]) {
+            return '0 Bytes';
+        }
+
+        return (bytes / Math.pow(k, i)).toPrecision(3) + '' + sizes[i];
+    }
 }

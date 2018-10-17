@@ -72,7 +72,6 @@ module.exports = {
         inline: false,
         codeCount: false, //代码统计
         watchFolder: {
-            css: ['./src/css'],
             js: ['./src/js'],
             imgs: ['./src/images'],
             html: ['./src/html']
